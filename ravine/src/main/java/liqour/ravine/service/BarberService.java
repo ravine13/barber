@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import liqour.ravine.entities.Barber;
 
+import java.util.List;
+
 
 @Service
 public class BarberService {
@@ -23,7 +25,7 @@ public class BarberService {
         return barberRepository.save(barber);
     }
     //get
-    public Iterable<Barber>getAllBarbers(){
+    public List<Barber> getAllBarbers(){
         return barberRepository.findAll();
     }
     //getById

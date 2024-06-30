@@ -11,6 +11,6 @@ import liqour.ravine.entities.Booking;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
-    @Query("SELECT r FROM Booking r WHERE r.Id = :id")
+    @Query("SELECT r FROM Booking r WHERE r.booking_id = :id")
     Optional<Booking> findBookingById(@Param("id") Integer id);
 }

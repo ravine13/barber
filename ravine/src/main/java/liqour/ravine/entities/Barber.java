@@ -21,7 +21,7 @@ public class Barber {
     @Column(name="email")
     private String email;
     @Column(name="phone_number")
-    private long phone_number;
+    private int phone_number;
     @Column(name="image_url")
     private String image_url;
     @Column(name="speciality")

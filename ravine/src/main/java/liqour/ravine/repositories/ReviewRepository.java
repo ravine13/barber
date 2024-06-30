@@ -11,7 +11,7 @@ import liqour.ravine.entities.Review;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer>{
-    @Query("SELECT r FROM Review WHERE r.id= :id ")
+    @Query("SELECT r FROM Review  r WHERE r.review_id = :id ")
     Optional<Review> findReviewById(@Param("id")Integer id);
     
 }
