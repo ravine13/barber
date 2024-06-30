@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import liqour.ravine.entities.Profile;
 
 public interface ProfileRepository extends JpaRepository<Profile ,Integer>{
-    @Query("SELECT r FROM Profile r WHERE r.id=:id")
+    @Query("SELECT r FROM Profile r WHERE r.profile_id =:id")
     Optional<Profile> findBookingById(@Param("id") Integer id);
     
 }

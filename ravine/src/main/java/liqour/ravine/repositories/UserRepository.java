@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import liqour.ravine.entities.User;
 
 public interface UserRepository extends JpaRepository<User,Integer>{
-    @Query("SELECT r FROM User WHERE r.id = :id")
+    @Query("SELECT r FROM User  r WHERE r.user_id = :id")
     Optional<User> findUserById(@Param("id")Integer id);
     
 }

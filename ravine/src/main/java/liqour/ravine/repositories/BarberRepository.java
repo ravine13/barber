@@ -12,7 +12,7 @@ import liqour.ravine.entities.Barber;
 
 @Repository
 public interface BarberRepository extends JpaRepository<Barber,Integer> {
-    @Query("SELECT r FROM barber r WHERE r.id = :id")
+    @Query("SELECT r FROM Barber r WHERE r.barber_id = :id")
     Optional<Barber> findBarberById(@Param("id")Integer id);
     
 

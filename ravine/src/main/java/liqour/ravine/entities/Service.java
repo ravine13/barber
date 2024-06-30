@@ -13,7 +13,7 @@ import lombok.Data;
 public class Service {
     @Id
     @Column(name="service_id")
-    private int review_id;
+    private int service_id;
     @Column(name="service_name")
     private String service_name;
     @Column(name="customer_id")
