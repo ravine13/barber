@@ -14,6 +14,6 @@ import liqour.ravine.entities.Customer;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer>{
-    @Query("SELECT r FROM Customer r WHERE r.id = :id")
+    @Query("SELECT r FROM Customer r WHERE r.customer_id = :id")
     Optional<Customer> findCustomerById(@Param("id") Integer id);
 }
