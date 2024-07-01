@@ -14,21 +14,28 @@ public class Customer {
     @Id
     @Column(name="customer_id")
     private int customer_id;
+    
     @Column(name="fname")
     private String fname;
+    
     @Column(name="lname")
     private String lname;
+    
     @Column(name="email")
     private String email;
+    
     @Column(name="phone_number")
     private long phone_number;
+    
     @Column(name="image_url")
     private String image_url;
+    
     @Column(name="barber_id")
     private int barber_id;
+    
     @Column(name="service_id")
     private int service_id;
+    
     @Column(name="booking_id")
     private int booking_id;
-    
 }
