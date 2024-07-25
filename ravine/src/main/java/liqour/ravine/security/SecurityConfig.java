@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import liqour.ravine.service.CustomUserDetailsService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfiguration {
@@ -32,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -43,11 +45,11 @@ public class SecurityConfig extends WebSecurityConfiguration {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/authenticate", "/register").permitAll() // Allow public access to these endpoints
-                .anyRequest().authenticated() // Require authentication for all other requests
+                .antMatchers("/authenticate", "/register").permitAll() 
+                .anyRequest().authenticated() 
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Use stateless session (no session will be created or used by Spring Security)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); 
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // Add the JWT filter
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); 
     }
 }
