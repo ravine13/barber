@@ -1,6 +1,5 @@
 package liqour.ravine.repositories;
 
-import java.math.BigInteger;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +13,5 @@ import liqour.ravine.entities.Rating;
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
 
     @Query("SELECT r FROM Rating r WHERE r.rating_id = :id")
-    Optional<Rating> findRatingById(@Param("id") Integer);
+    Optional<Rating> findRatingById(@Param("id") Integer id);
 }
