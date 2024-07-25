@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 import liqour.ravine.entities.Rating;
 
 @Repository
-public interface RatingRepository extends JpaRepository<Rating, BigInteger> {
+public interface RatingRepository extends JpaRepository<Rating, Integer> {
 
     @Query("SELECT r FROM Rating r WHERE r.rating_id = :id")
-    Optional<Rating> findRatingById(@Param("id") BigInteger id);
+    Optional<Rating> findRatingById(@Param("id") Integer);
 }
