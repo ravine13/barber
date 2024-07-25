@@ -4,7 +4,6 @@ import liqour.ravine.entities.Rating;
 import liqour.ravine.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.math.BigInteger;
 
 @Service
 public class RatingService {
@@ -26,7 +25,7 @@ public class RatingService {
         return ratingRepository.findAll();
     }
 
-    public Rating getRatingById(BigInteger id) {
+    public Rating getRatingById(Integer id) {
         return ratingRepository.findById(id).orElse(null);
     }
 
@@ -36,7 +35,7 @@ public class RatingService {
     }
 
     // Delete
-    public void deleteRating(BigInteger id) {
+    public void deleteRating(Integer id) {
         ratingRepository.deleteById(id);
     }
 }

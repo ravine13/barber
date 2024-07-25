@@ -1,11 +1,17 @@
-package liqour.ravine.controllers;
+package liqour.ravine.controller;
 
 import liqour.ravine.entities.User;
+import liqour.ravine.model.AuthenticationRequest;
+import liqour.ravine.model.AuthenticationResponse;
 import liqour.ravine.repositories.UserRepository;
 import liqour.ravine.security.JwtUtil;
-import liqour.ravine.services.CustomUserDetailsService;
+import liqour.ravine.service.CustomUserDetailsService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
