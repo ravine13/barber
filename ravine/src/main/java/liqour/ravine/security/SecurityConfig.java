@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfiguration {
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        return super.authenticationManagerBean()
     }
 
     @Override
