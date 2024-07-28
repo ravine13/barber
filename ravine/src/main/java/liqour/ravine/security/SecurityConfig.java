@@ -1,66 +1,73 @@
 package liqour.ravine.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+
+import liqour.ravine.service.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
-import liqour.ravine.service.CustomUserDetailsService;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+@RequiredArgsConstructor
+public class SecurityConfig  {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-            .cors().and()
-            .authorizeRequests()
-            .antMatchers("/authenticate", "/register").permitAll()
-            .anyRequest().authenticated()
-            .and()
-            .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+    private final PasswordEncoder passwordEncoder;
+    private final SecurityContextRepository securityContextRepository;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/authenticate", "/register","/test/**").permitAll()
+                                .anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowedOrigins(Arrays.asList("*"));
+                    configuration.setAllowedMethods(Arrays.asList("*"));
+                    configuration.setAllowedHeaders(Arrays.asList("*"));
+                    return configuration;
+                }))
+                .sessionManagement(smc -> smc.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .securityContext(request -> request.securityContextRepository(securityContextRepository))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(daoAuthenticationProvider());
+        return authenticationManagerBuilder.build();
     }
+
+    @Bean
+    public AuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setHideUserNotFoundExceptions(false);
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        return daoAuthenticationProvider;
+    }
+
 }
